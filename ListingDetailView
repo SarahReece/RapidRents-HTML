@@ -1,0 +1,258 @@
+@model RapidRents.Web.Models.ViewModels.ListingDetailViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutPublic.cshtml";
+}
+<style>
+    .modal-backdrop {
+        opacity: 0.93 !important;
+    }
+
+    .modal-header {
+        color: #888;
+        background-color: #F4F5F7;
+        text-align: center;
+    }
+
+        .modal-header h1 {
+            font-size: 50px;
+        }
+
+    .modal-body {
+        color: #888;
+        background-color: #F4F5F7;
+        text-align: center;
+    }
+
+    .premium_properties {
+        background-color: #F4F5F7;
+        text-align: center;
+        border-right: 0px;
+        border-left: 0px;
+        border-bottom: 1px solid #ddd;
+    }
+
+
+        .premium_properties .thumbnail {
+            background-color: #F4F5F7;
+            text-align: center;
+        }
+
+            .premium_properties .thumbnail p {
+                background-color: #F4F5F7;
+                text-align: center;
+                padding-left: 20px;
+                margin-left: 35px;
+                width: 150px;
+                border: none;
+            }
+
+    #search-field {
+        width: 90%;
+        margin-top: 1.5px;
+        height: 35px;
+    }
+
+    #search-button {
+        position: absolute;
+        margin-left: 0px;
+        color: #555a60;
+        background-color: #FEFEFF;
+    }
+
+    #back-button {
+        font-family: 'Pontano Sans', Tahoma, sans-serif !important;
+        margin-top: 40px;
+        color: #fff;
+        border-color: #3fa243;
+        background-color: #4CAF50;
+        
+    }
+
+    .modal-footer {
+        margin-top: 0px;
+        color: #888;
+        background-color: #F4F5F7;
+        text-align: center;
+        border: none;
+        padding-bottom: 40px;
+    }
+
+    #back-button {
+        margin-top: 40px;
+        color: #fff;
+        border-color: #3fa243;
+        background-color: #4CAF50;
+        font-weight:bold;
+    }
+    
+    .slider-images {
+    width: 600px;
+    position:absolute;
+    margin-left:20px; 
+}
+#listing-description {
+    padding-top:50px;
+    margin-top: 0px;
+    margin-right:10px;
+    margin-bottom:10px;
+    margin-left:0;
+}
+
+#listing-description,
+p {
+    margin-right:175px;
+
+}
+
+.carousel{
+    position:absolute;
+
+}
+
+h2{
+    text-align:center;
+}
+#aListing {
+    padding-top:460px;
+    width:800px;
+}
+.listing-header {
+    padding-bottom:50px;
+}
+#slider{
+    padding-top:55px;
+}
+</style>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/ListingDetail.css">
+</head>
+
+<div class="container body-content" data-ng-app="RapidRentsApp">
+    <div class="row" data-ng-controller="listingDetailController as dashboard" id="listingDetailController">
+        <div class="col-sm-8">
+            <div class="listing-header">
+                <div class="text-left pull-left">
+                    <h3 class="text-left">{{dashboard.item.headline}}</h3>
+                    <h3 class="text-left">
+
+                        {{dashboard.item.location.line1}}
+                        {{dashboard.item.location.Line2}}
+                        {{dashboard.item.location.city}}
+                        {{dashboard.item.location.state}}
+                        {{dashboard.item.location.zipCode}}
+
+                    </h3>
+                </div>
+                <div class="text-right pull-right">
+                    <h3 class="text-right">${{dashboard.item.rentCost}} per month</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5 col-xs-8 dashboard.selectListing(aListing)" id="aListing" ng-model="vm.aListing.id">
+
+                    <h4>Description</h4>
+                    <p>{{dashboard.item.description}}</p>
+                    <h4>Available Utilities</h4>
+                    <p>{{dashboard.item.utilitiesIncluded | utilitiesFilter}}</p>
+
+                    <h4>Lease Terms</h4>
+                    <p>{{dashboard.item.leaseTerms | leaseTermsFilter}}</p>
+
+                    <h4>Status</h4>
+                    <p>{{dashboard.item.status | statusFilter}}</p>
+                    <h4>Availability Date</h4>
+                    <p>{{ dashboard.item.availabilityDate | date : format}}</p>
+                    <h4>Has Parking</h4>
+                    <p>{{dashboard.item.hasParking | parkingFilter}}</p>
+                    @*<h4>Listing number</h4>
+                    <p>{{dashboard.item.id}}</p>
+                    <p>{{dashboard.item.location.id}}</p>*@
+
+                </div>
+            </div>
+        </div>
+
+        <div id="message-box">
+            <div class="col-sm-4">
+                <ng-include src="'/scripts/RapidRents/ContactUs/ContactUsView.html'"></ng-include>
+            </div>
+        </div>
+
+        <div class="row" data-ng-controller="sliderController as slider" id="slider">
+            <div class="carousel-container">
+                <uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+                    <uib-slide data-ng-repeat="image in images track by image.id" index="image.id">
+                        <img data-ng-src="{{image.src}}" style="margin:auto;" />
+                    </uib-slide>
+                </uib-carousel>
+            </div>
+            <slider images="slider.images" template-url="templates/templateurl1.html" class="slider-images"></slider>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="templates/templateurl1.html">
+        <div style="height: 300px">
+            <uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+                <uib-slide data-ng-repeat="image in images" index="image.id">
+                    <img data-ng-src="{{image.src}}" style="margin:auto;" />
+                </uib-slide>
+            </uib-carousel>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="modalContent.html" class="modal modal-backdrop">
+        <div class="modal-header">
+            <h1 class="modal-title"><strong>SORRY!</strong></h1>
+            <h3>THIS LISTING IS CURRENTLY UNAVAILABLE</h3>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li ng-repeat="item in mc.modalItems">
+                    <a class="btn btn-success" ng-click="mc.selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            <h3>Please check back later. In the meantime, feel free to check out our featured listings!</h3>
+
+            @*Hard coded featured listings*@
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-12 premium_properties">
+                        <div class="col-sm-4 col-xs-4 premium_property" data-text="Featured">
+                            <div class="thumbnail">
+                                <a href="property.html"><img width="192" src="https://s-media-cache-ak0.pinimg.com/236x/42/59/28/4259287641cbde8523eb1360bdcec070.jpg" alt=""></a>
+                                <h3>Price : $3,350,000</h3>
+                                <p><a href="property.html">7 bedroom house</a><br />The Vineyard, Richmond, TW10								</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-4 premium_property" data-text="Premium">
+                            <div class="thumbnail">
+                                <a href="property.html"><img width="192" src="https://www.hiltonhyland.com/wp-content/uploads/2015/12/content_la1.png" alt=""></a>
+                                <h3>Price : $229,950</h3>
+                                <p><a href="property.html">1 bedroom flat</a><br />Lower Mortlake Road, North Sheen								</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-4 premium_property" data-text="Offers availiable">
+                            <div class="thumbnail">
+                                <a href="property.html"><img width="192" src="http://images.kw.com/agent_photos/2/2/3/223425//library/flohomes_1307916773572.jpg" alt=""></a>
+                                <h3>Price : $520,000</h3>
+                                <p><a href="property.html">2 bedroom apartment</a><br />Mount Ararat Road, Richmond								</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*End hard coded featured listings*@
+        </div>
+        <div class="modal-footer">
+            <h3>Or search for another listing:</h3>
+            <form class="form-inline" id="search-box">
+                <input type="text" placeholder="I'm looking for..." class="form-control" id="search-field" />
+                <button class="btn" id="search-button" ng-click="mc.search()" tabindex="-10"><span class="glyphicon glyphicon-search"></span></button>
+                <button class="btn btn-lg" id="back-button" ng-click="mc.goBack()"><strong>NO THANKS, TAKE ME BACK</strong></button>
+            </form>
+        </div>
+    </script>
+
+</div>
